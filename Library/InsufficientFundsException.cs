@@ -9,5 +9,9 @@ namespace Library
         public InsufficientFundsException(string message) : base(message)
         {
         }
+
+        public InsufficientFundsException()
+        {
+        }
     }
 }

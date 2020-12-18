@@ -9,7 +9,7 @@ namespace Library
         private static List<int> _uniqueIds = new List<int>(1);
 
         public int Id { get; }
-        private string Currency { get; }
+        public string Currency { get; }
         private decimal Amount { get; set; } = 0;
         private decimal _transUSD { get; } = 1;
         private decimal _transEUR { get; } = 1;
@@ -34,22 +34,24 @@ namespace Library
                 default: throw new NotSupportedException(nameof(currency));
             }
             Currency = currency;
+            // if (_uniqueIds.Capacity == 1)
+            // {
+                // _uniqueIds.Add(999999);
+            // }
+            // int countIds = _uniqueIds.Count;
+            // _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
+            // Id = _uniqueIds[countIds];
             if (_uniqueIds.Capacity == 1)
             {
-                _uniqueIds.Add(999999);
+                _uniqueIds.Add(100000000);
             }
             int countIds = _uniqueIds.Count;
-            _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
-            Id = _uniqueIds[countIds];
-            /*Random rnd = new Random();
-            int id = rnd.Next(100000, 100000000);*/
-            /*while (_uniqueIds.Contains(id))
+            if (_uniqueIds[countIds - 1] == 100000)
             {
-                id = rnd.Next(100000, 100000000);
-            }*/
-            //_uniqueIds[_uniqueIds.Count - 1] = _uniqueIds.Count - 1;
-            //Id = new Random().Next(100000, 100000000);
-            //Id = new Random().Next(1, 100);
+                throw new Exception("Can't create Id. Platform have maximum accounts");
+            }
+            _uniqueIds.Add(_uniqueIds[countIds - 1] - 1);
+            Id = _uniqueIds[countIds];
         }
 
         public void Deposit(decimal amount, string currency)

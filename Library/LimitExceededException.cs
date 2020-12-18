@@ -9,5 +9,9 @@ namespace Library
         public LimitExceededException(string message) : base(message)
         {
         }
+        
+        public LimitExceededException()
+        {
+        }
     }
 }

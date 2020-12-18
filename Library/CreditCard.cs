@@ -9,23 +9,14 @@ namespace Library
         public CreditCard()
         {
             Name = "CreditCard";
-        }
-
-        private bool IsOutOfTransactionLimit(decimal amount, string currency)
-        {
-            switch (currency)
-            {
-                case "USD": return amount * 28.36m > 3000;
-                case "EUR": return amount * 33.63m > 3000;
-                default: return amount > 3000;
-            }
+            TransactionLimit = 3000;
         }
 
         public void StartDeposit(decimal amount, string currency)
         {
             if (IsOutOfTransactionLimit(amount, currency))
             {
-                throw new LimitExceededException("Transaction amount out of limit (3000 UAH)");
+                throw new LimitExceededException();
             }
             string cardNumber;
             string expiryDate;
@@ -53,11 +44,14 @@ namespace Library
                 if (IsValidCVV(cvvCode)) break;
                 Console.WriteLine("Invalid CVV code. Try again.");
             }
-            Console.WriteLine("Success!");
         }
 
         public void StartWithdrawal(decimal amount, string currency)
         {
+            if (IsOutOfTransactionLimit(amount, currency))
+            {
+                throw new LimitExceededException();
+            }
             string cardNumber;
             Console.WriteLine("Withdrawal with CreditCard:");
             while (true)
@@ -67,7 +61,6 @@ namespace Library
                 if (IsValidCardNumber(cardNumber)) break;
                 Console.WriteLine("Invalid card number. Try again.");
             }
-            Console.WriteLine("Success!");
         }
 
         private bool IsValidCardNumber(string value)

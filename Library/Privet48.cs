@@ -8,10 +8,10 @@ namespace Library
     {
         public Privet48()
         {
-            SumOfTransactions = 0;
             Name = "Privet48";
             AvailableCards = new string[] { "Gold", "Platinum" };
-            TransactionsLimit = 10000;
+            CardsLimit = 10000;
+            TransactionLimit = -1;
         }
     }
 }

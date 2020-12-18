@@ -21,13 +21,14 @@ namespace Library
             Email = email;
             Password = password;
             Account = new Account(currency);
-            if (_uniqueIds.Capacity == 1)
-            {
-                _uniqueIds.Add(999999);
-            }
-            int countIds = _uniqueIds.Count;
-            _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
-            Id = _uniqueIds[countIds];
+            Id = Account.Id;
+            // if (_uniqueIds.Capacity == 1)
+            // {
+            //     _uniqueIds.Add(999999);
+            // }
+            // int countIds = _uniqueIds.Count;
+            // _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
+            // Id = _uniqueIds[countIds];
         }
 
         public bool IsPasswordValid(string password) => password == Password;

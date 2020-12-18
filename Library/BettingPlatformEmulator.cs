@@ -77,6 +77,18 @@ namespace Library
                         }
                     }
                 }
+                catch (LimitExceededException)
+                {
+                    Console.WriteLine("Please, try to make a trnsaction with lower amount");
+                }
+                catch (PaymentServiceException)
+                {
+                    Console.WriteLine("Something went wrong. Try again later...");
+                }
+                catch (InsufficientFundsException)
+                {
+                    Console.WriteLine("Please, try to make a transaction with lower amount or change the payment method");
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
@@ -97,10 +109,13 @@ namespace Library
                 var price = BetService.Bet(amount);
                 if (price == 0)
                 {
-                    throw new Exception("You lose.");
+                    Console.WriteLine("You lose.");
                 }
-                Console.WriteLine($"You won {price} {currency}");
-                ActivePlayer.Deposit(price, currency);
+                else 
+                {
+                    Console.WriteLine($"You won {price} {currency}");
+                    ActivePlayer.Deposit(price, currency);
+                }
             }
             catch (InvalidOperationException)
             {
@@ -210,6 +225,22 @@ namespace Library
             {
                 throw new InvalidCastException("Amount must be raither than 0.");
             }
+            catch (LimitExceededException)
+            {
+                throw;
+            }
+            catch (PaymentServiceException)
+            {
+                throw;
+            }
+            catch (InsufficientFundsException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private void Withdraw()
@@ -234,6 +265,23 @@ namespace Library
             {
                 throw new NotSupportedException("Failed. Invalid currency.");
             }
+            catch (LimitExceededException)
+            {
+                throw;
+            }
+            catch (PaymentServiceException)
+            {
+                throw;
+            }
+            catch (InsufficientFundsException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
 
             try
             {

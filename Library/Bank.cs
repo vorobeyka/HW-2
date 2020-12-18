@@ -7,28 +7,19 @@ namespace Library
     public abstract class Bank : PaymentMethodBase, ISupportDeposit, ISupportWithdrawal
     {
         protected string[] AvailableCards { get; set; }
-        protected decimal TransactionsLimit { get; set; }
-        protected decimal SumOfTransactions
-        {
-            get { return SumOfTransactions; }
-            set
-            {
-                if (SumOfTransactions + value > TransactionsLimit && TransactionsLimit != -1)
-                {
-                    throw new LimitExceededException($"Sum Of Transactions out of limit ({TransactionsLimit})");
-                }
-            }
-        }
 
-        public void AddTransactionAmount(decimal amount, string currency)
+        protected decimal CardsLimit { get; set; }
+
+        protected void ChangeCardsLImit(decimal amount, string currency)
         {
+            if (CardsLimit < 0) throw new InsufficientFundsException();
             switch (currency)
             {
-                case "USD": SumOfTransactions += amount * 28.36m;
+                case "USD": CardsLimit -= amount * 28.36m;
                     break;
-                case "EUR": SumOfTransactions += amount * 33.63m;
+                case "EUR": CardsLimit -= amount * 33.63m ;
                     break;
-                default: SumOfTransactions += amount;
+                default: CardsLimit -= amount;
                     break;
             }
         }
@@ -36,6 +27,8 @@ namespace Library
         public void StartDeposit(decimal amount, string currency)
         {
             uint cardIndex;
+            if (IsOutOfTransactionLimit(amount, currency)) throw new LimitExceededException();
+            ChangeCardsLImit(amount, currency);
             TransactionWithCard(out cardIndex);
             Console.WriteLine($"You've withdraw {amount} {currency} from your {AvailableCards[cardIndex]} card successfully");
         }
@@ -43,6 +36,8 @@ namespace Library
         public void StartWithdrawal(decimal amount, string currency)
         {
             uint cardIndex;
+            if (IsOutOfTransactionLimit(amount, currency)) throw new LimitExceededException();
+            ChangeCardsLImit(amount, currency);
             TransactionWithCard(out cardIndex);
             Console.WriteLine($"You've deposit {amount} {currency} from your {AvailableCards[cardIndex]} card successfully");
         }

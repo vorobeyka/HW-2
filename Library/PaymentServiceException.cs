@@ -9,5 +9,9 @@ namespace Library
         public PaymentServiceException(string message) : base(message)
         {
         }
+
+        public PaymentServiceException()
+        {
+        }
     }
 }
