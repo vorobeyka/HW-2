@@ -34,23 +34,12 @@ namespace Library
                 default: throw new NotSupportedException(nameof(currency));
             }
             Currency = currency;
-            // if (_uniqueIds.Capacity == 1)
-            // {
-                // _uniqueIds.Add(999999);
-            // }
-            // int countIds = _uniqueIds.Count;
-            // _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
-            // Id = _uniqueIds[countIds];
             if (_uniqueIds.Capacity == 1)
             {
-                _uniqueIds.Add(100000000);
+                _uniqueIds.Add(999999);
             }
             int countIds = _uniqueIds.Count;
-            if (_uniqueIds[countIds - 1] == 100000)
-            {
-                throw new Exception("Can't create Id. Platform have maximum accounts");
-            }
-            _uniqueIds.Add(_uniqueIds[countIds - 1] - 1);
+            _uniqueIds.Add(_uniqueIds[countIds - 1] + 1);
             Id = _uniqueIds[countIds];
         }
 
