@@ -8,8 +8,10 @@ namespace Library
     {
         public Stereobank()
         {
+            SumOfTransactions = 0;
             Name = "Stereobank";
             AvailableCards = new string[] { "Black", "White", "Iron" };
+            TransactionsLimit = 7000;
         }
     }
 }

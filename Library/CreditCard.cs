@@ -11,8 +11,22 @@ namespace Library
             Name = "CreditCard";
         }
 
+        private bool IsOutOfTransactionLimit(decimal amount, string currency)
+        {
+            switch (currency)
+            {
+                case "USD": return amount * 28.36m > 3000;
+                case "EUR": return amount * 33.63m > 3000;
+                default: return amount > 3000;
+            }
+        }
+
         public void StartDeposit(decimal amount, string currency)
         {
+            if (IsOutOfTransactionLimit(amount, currency))
+            {
+                throw new LimitExceededException("Transaction amount out of limit (3000 UAH)");
+            }
             string cardNumber;
             string expiryDate;
             string cvvCode;

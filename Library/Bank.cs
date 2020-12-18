@@ -7,6 +7,31 @@ namespace Library
     public abstract class Bank : PaymentMethodBase, ISupportDeposit, ISupportWithdrawal
     {
         protected string[] AvailableCards { get; set; }
+        protected decimal TransactionsLimit { get; set; }
+        protected decimal SumOfTransactions
+        {
+            get { return SumOfTransactions; }
+            set
+            {
+                if (SumOfTransactions + value > TransactionsLimit && TransactionsLimit != -1)
+                {
+                    throw new LimitExceededException($"Sum Of Transactions out of limit ({TransactionsLimit})");
+                }
+            }
+        }
+
+        public void AddTransactionAmount(decimal amount, string currency)
+        {
+            switch (currency)
+            {
+                case "USD": SumOfTransactions += amount * 28.36m;
+                    break;
+                case "EUR": SumOfTransactions += amount * 33.63m;
+                    break;
+                default: SumOfTransactions += amount;
+                    break;
+            }
+        }
 
         public void StartDeposit(decimal amount, string currency)
         {
