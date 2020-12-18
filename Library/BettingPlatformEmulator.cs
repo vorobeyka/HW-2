@@ -9,14 +9,15 @@ namespace Library
         private List<Player> Players { get; }
         private Player ActivePlayer { get; set; } = null;
         private Account Account { get; }
-
-        private BetService BetService { get;  }
+        private BetService BetService { get; }
+        private PaymentService PaymentService { get; }
 
         public BettingPlatformEmulator()
         {
             Account = new Account("USD");
             Players = new List<Player>();
             BetService = new BetService();
+            PaymentService = new PaymentService();
         }
 
         public void Start()
@@ -148,7 +149,7 @@ namespace Library
                 }
                 catch (Exception)
                 {
-                    throw new Exception("Invalid currency. Try again.");
+                    Console.WriteLine("Invalid. Try again.");
                 }
             }
             Console.WriteLine($"Welcome, {ActivePlayer.FirstName} {ActivePlayer.LastName}!");
@@ -192,6 +193,11 @@ namespace Library
             SetAmountAndCurrency(out amount, out currency);
             try
             {
+                if (currency != "USD" && currency != "EUR" && currency != "UAH")
+                {
+                    throw new NotSupportedException(nameof(currency));
+                }
+                PaymentService.StartDeposit(amount, currency);
                 Account.Deposit(amount, currency);
                 ActivePlayer.Deposit(amount, currency);
                 Console.WriteLine("Success!");
@@ -213,6 +219,11 @@ namespace Library
             SetAmountAndCurrency(out amount, out currency);
             try
             {
+                if (currency != "USD" && currency != "EUR" && currency != "UAH")
+                {
+                    throw new NotSupportedException(nameof(currency));
+                }
+                PaymentService.StartWithdrawal(amount, currency);
                 ActivePlayer.Withdraw(amount, currency);
             }
             catch (InvalidOperationException)
